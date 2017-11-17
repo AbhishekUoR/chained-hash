@@ -50,6 +50,19 @@ struct hash* hash_create() {
 
 void hash_free(struct hash* hash) {
   assert(hash);
+
+  /*
+   * Free all of the association structs stored in the table.
+   */
+  for (int i = 0; i < hash->capacity; i++) {
+    struct association* next, * cur = hash->table[i];
+    while (cur != NULL) {
+      next = cur->next;
+      free(cur);
+      cur = next;
+    }
+  }
+
   free(hash->table);
   free(hash);
 }
